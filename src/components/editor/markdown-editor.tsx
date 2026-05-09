@@ -232,11 +232,11 @@ export function MarkdownEditor({
             onClick={() => setShowPreview((s) => !s)}
             className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-medium hover:bg-accent"
           >
-            {showPreview ? <><EyeOff className="h-3.5 w-3.5" /> Hide preview</> : <><Eye className="h-3.5 w-3.5" /> Show preview</>}
+            {showPreview ? <><EyeOff className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Hide preview</span></> : <><Eye className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Preview</span></>}
           </button>
         </div>
       </div>
-      <div className={cn("grid", showPreview ? "md:grid-cols-2" : "grid-cols-1")}>
+      <div className={cn("grid min-w-0", showPreview ? "md:grid-cols-2" : "grid-cols-1")}>
         <textarea
           ref={taRef}
           name={name}
@@ -244,11 +244,11 @@ export function MarkdownEditor({
           onChange={(e) => setValue(e.target.value)}
           rows={rows}
           placeholder={placeholder}
-          className="w-full bg-background px-4 py-3 font-mono text-sm leading-6 outline-none resize-y border-0 md:border-r"
+          className="w-full bg-background px-3 sm:px-4 py-3 font-mono text-[13px] sm:text-sm leading-6 outline-none resize-y border-0 md:border-r min-h-[40vh]"
         />
         {showPreview && (
-          <div className="bg-card overflow-auto max-h-[80vh]">
-            <div className="p-5 prose-wiki" dangerouslySetInnerHTML={{ __html: previewHtml || "<p class='text-muted-foreground italic'>Preview will appear here…</p>" }} />
+          <div className="bg-card overflow-auto max-h-[60vh] md:max-h-[80vh] border-t md:border-t-0">
+            <div className="p-4 sm:p-5 prose-wiki" dangerouslySetInnerHTML={{ __html: previewHtml || "<p class='text-muted-foreground italic'>Preview will appear here…</p>" }} />
             {!previewHtml && (
               <div className="px-5 pb-5 text-xs text-muted-foreground border-t pt-3 mt-2">
                 <FileText className="inline h-3.5 w-3.5 mr-1" />

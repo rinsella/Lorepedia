@@ -85,26 +85,25 @@ export default async function PublicWorldHome({
   const typeCount = new Map(byType.map((b) => [b.type, b._count._all]));
 
   return (
-    <div className="container py-10 max-w-6xl space-y-8">
+    <div className="container py-6 sm:py-10 max-w-6xl space-y-6 sm:space-y-8">
       {/* Cover header */}
       <header className="surface-parchment rounded-xl overflow-hidden">
-        <div
-          className="h-40 sm:h-56 bg-gradient-to-br from-primary/35 via-accent to-[hsl(var(--gold)/0.35)]"
+        <div className="h-32 sm:h-40 md:h-56 bg-gradient-to-br from-primary/35 via-accent to-[hsl(var(--gold)/0.35)]"
           style={world.cover ? { backgroundImage: `url(${world.cover})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
           aria-hidden
         />
-        <div className="p-6 sm:p-8">
+        <div className="p-4 sm:p-6 md:p-8">
           <div className="flex items-start justify-between flex-wrap gap-3">
-            <div>
+            <div className="min-w-0">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">World</p>
-              <h1 className="font-serif text-4xl sm:text-5xl font-semibold mt-1">{world.name}</h1>
+              <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl font-semibold mt-1 break-words">{world.name}</h1>
               {world.description && (
-                <p className="text-muted-foreground mt-3 max-w-2xl text-base leading-relaxed">{world.description}</p>
+                <p className="text-muted-foreground mt-2 sm:mt-3 max-w-2xl text-sm sm:text-base leading-relaxed">{world.description}</p>
               )}
             </div>
             <VisibilityBadge visibility={world.visibility} />
           </div>
-          <div className="flex items-center gap-3 text-sm text-muted-foreground mt-5">
+          <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground mt-4 sm:mt-5 flex-wrap">
             <span className="inline-flex items-center gap-1.5"><BookOpen className="h-4 w-4" /> {world._count.pages} pages</span>
             <span>· {world._count.members} member{world._count.members === 1 ? "" : "s"}</span>
             <span>· {world.language ?? "en"}</span>
@@ -114,7 +113,7 @@ export default async function PublicWorldHome({
 
       {/* In-world search & type filter */}
       <form className="flex flex-wrap items-center gap-2">
-        <div className="relative flex-1 min-w-[16rem]">
+        <div className="relative flex-1 min-w-0">
           <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             name="q"
@@ -126,7 +125,7 @@ export default async function PublicWorldHome({
         <select
           name="type"
           defaultValue={typeFilter}
-          className="rounded-md border bg-background px-3 py-2 text-sm"
+          className="rounded-md border bg-background px-2 sm:px-3 py-2 text-sm max-w-[10rem] sm:max-w-none"
         >
           <option value="">All types</option>
           {TYPE_ORDER.map((t) => (

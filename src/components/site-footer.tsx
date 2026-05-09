@@ -4,11 +4,11 @@ import { Github } from "lucide-react";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/70 mt-16 bg-background/60">
-      <div className="container py-10 grid gap-8 md:grid-cols-4">
-        <div className="md:col-span-2">
+    <footer className="border-t border-border/70 mt-12 sm:mt-16 bg-background/60">
+      <div className="container py-8 sm:py-10 grid gap-6 sm:gap-8 grid-cols-2 md:grid-cols-4">
+        <div className="col-span-2 md:col-span-2">
           <Logo size="md" />
-          <p className="text-sm text-muted-foreground mt-3 max-w-sm">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-3 max-w-sm">
             A self-hostable worldbuilding wiki for writers, GMs, and creators.
             Build a living encyclopedia of your fictional universe — with
             wikilinks, infoboxes, timelines, and maps.
@@ -42,7 +42,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="gold-rule" />
-      <div className="container py-5 text-xs text-muted-foreground flex flex-col sm:flex-row gap-2 justify-between">
+      <div className="container py-4 sm:py-5 text-[11px] sm:text-xs text-muted-foreground flex flex-col sm:flex-row gap-2 justify-between">
         <span>© {new Date().getFullYear()} Lorepedia. All worlds belong to their creators.</span>
         <span className="font-serif italic">“Every legend deserves its archive.”</span>
       </div>

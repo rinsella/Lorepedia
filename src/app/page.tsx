@@ -122,30 +122,30 @@ export default async function HomePage() {
           <div className="absolute -top-32 left-1/3 h-[40rem] w-[40rem] rounded-full bg-primary/20 blur-3xl" />
           <div className="absolute top-20 right-10 h-[30rem] w-[30rem] rounded-full bg-[hsl(var(--gold)/0.25)] blur-3xl" />
         </div>
-        <div className="container py-20 md:py-28 max-w-5xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border bg-background/70 backdrop-blur px-3.5 py-1.5 text-xs font-medium text-muted-foreground mb-6">
-            <BrandMark size={18} />
+        <div className="container py-14 sm:py-20 md:py-28 max-w-5xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border bg-background/70 backdrop-blur px-3 py-1.5 text-[11px] sm:text-xs font-medium text-muted-foreground mb-5 sm:mb-6">
+            <BrandMark size={16} />
             <span>The worldbuilder’s wiki, reimagined.</span>
           </div>
-          <h1 className="font-serif text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05]">
+          <h1 className="font-serif text-3xl sm:text-5xl md:text-7xl font-semibold tracking-tight leading-[1.1] sm:leading-[1.05]">
             Build your <span className="text-primary">fictional universe</span><br className="hidden md:block" />
-            as a <span className="italic underline decoration-[hsl(var(--gold))] decoration-4 underline-offset-4">living wiki</span>.
+            as a <span className="italic underline decoration-[hsl(var(--gold))] decoration-2 sm:decoration-4 underline-offset-4">living wiki</span>.
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mt-5 sm:mt-6 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0">
             Lorepedia is a self-hostable worldbuilding wiki for writers, GMs, and creators.
-            Link characters, places, factions, and events with <code className="font-mono text-base text-primary">[[wikilinks]]</code>,
+            Link characters, places, factions, and events with <code className="font-mono text-sm sm:text-base text-primary">[[wikilinks]]</code>,
             publish a living encyclopedia, and never lose a thread of lore again.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-10">
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 mt-8 sm:mt-10">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-md bg-primary text-primary-foreground px-6 py-3 font-medium shadow-lg shadow-primary/20 hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground px-5 sm:px-6 py-3 text-sm sm:text-base font-medium shadow-lg shadow-primary/20 hover:opacity-90"
             >
               Start your world — it’s free <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/explore"
-              className="inline-flex items-center gap-2 rounded-md border bg-background/80 backdrop-blur px-6 py-3 font-medium hover:bg-accent"
+              className="inline-flex items-center justify-center gap-2 rounded-md border bg-background/80 backdrop-blur px-5 sm:px-6 py-3 text-sm sm:text-base font-medium hover:bg-accent"
             >
               <Compass className="h-4 w-4" /> Explore demo worlds
             </Link>
@@ -157,14 +157,14 @@ export default async function HomePage() {
       </section>
 
       {/* What is Lorepedia */}
-      <section className="container py-20 max-w-5xl">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className="container py-12 sm:py-16 lg:py-20 max-w-5xl">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div>
             <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">What is Lorepedia</p>
-            <h2 className="font-serif text-4xl font-semibold mt-2 leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold mt-2 leading-tight">
               A real wiki for the worlds you invent.
             </h2>
-            <p className="text-muted-foreground mt-5 leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-foreground mt-4 sm:mt-5 leading-relaxed">
               Notes apps weren’t built for fiction. Wikis weren’t built for writers.
               Lorepedia gives you the structure of Wikipedia, the linking of Obsidian,
               and the workflow of a publishing tool — with privacy controls designed
@@ -177,7 +177,7 @@ export default async function HomePage() {
               <p className="flex gap-2"><span className="text-[hsl(var(--gold))]">✦</span> Export your entire universe in one click.</p>
             </div>
           </div>
-          <div className="surface-parchment rounded-xl p-6 font-mono text-sm leading-relaxed">
+          <div className="surface-parchment rounded-xl p-4 sm:p-6 font-mono text-xs sm:text-sm leading-relaxed overflow-hidden">
             <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
               <span className="h-2 w-2 rounded-full bg-destructive/70" />
               <span className="h-2 w-2 rounded-full bg-amber-500/70" />
@@ -203,15 +203,15 @@ apprentice of [[Master Calenor]].
 
       {/* Featured worlds */}
       {featured.length > 0 && (
-        <section className="container py-16 max-w-6xl">
-          <div className="flex items-end justify-between gap-4 mb-8">
+        <section className="container py-10 sm:py-14 lg:py-16 max-w-6xl">
+          <div className="flex items-end justify-between gap-4 mb-6 sm:mb-8">
             <div>
               <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">Demo worlds</p>
-              <h2 className="font-serif text-3xl font-semibold mt-1">See what you can build.</h2>
+              <h2 className="font-serif text-2xl sm:text-3xl font-semibold mt-1">See what you can build.</h2>
             </div>
-            <Link href="/explore" className="text-sm text-primary hover:underline">Browse all →</Link>
+            <Link href="/explore" className="text-sm text-primary hover:underline whitespace-nowrap">Browse all →</Link>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {featured.map((w) => (
               <Link
                 key={w.id}
@@ -232,15 +232,15 @@ apprentice of [[Master Calenor]].
 
       {/* Features */}
       <section className="border-y border-border/70 bg-card/40">
-        <div className="container py-20 max-w-6xl">
-          <div className="text-center max-w-2xl mx-auto mb-14">
+        <div className="container py-12 sm:py-16 lg:py-20 max-w-6xl">
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
             <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">Features</p>
-            <h2 className="font-serif text-4xl font-semibold mt-2">Everything a worldbuilder needs.</h2>
-            <p className="text-muted-foreground mt-3">From your first lone protagonist to a sprawling multi-author saga.</p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold mt-2">Everything a worldbuilder needs.</h2>
+            <p className="text-sm sm:text-base text-muted-foreground mt-3">From your first lone protagonist to a sprawling multi-author saga.</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {FEATURES.map(({ icon: Icon, title, body }) => (
-              <div key={title} className="surface-parchment rounded-lg p-5">
+              <div key={title} className="surface-parchment rounded-lg p-4 sm:p-5">
                 <div className="h-9 w-9 rounded-md bg-primary/10 text-primary flex items-center justify-center mb-3">
                   <Icon className="h-5 w-5" />
                 </div>
@@ -253,14 +253,14 @@ apprentice of [[Master Calenor]].
       </section>
 
       {/* Who it's for */}
-      <section className="container py-20 max-w-6xl">
-        <div className="text-center mb-12">
+      <section className="container py-12 sm:py-16 lg:py-20 max-w-6xl">
+        <div className="text-center mb-8 sm:mb-12">
           <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">Who it’s for</p>
-          <h2 className="font-serif text-4xl font-semibold mt-2">If you build worlds, you need this.</h2>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold mt-2">If you build worlds, you need this.</h2>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {AUDIENCES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-lg border bg-card p-6">
+            <div key={title} className="rounded-lg border bg-card p-5 sm:p-6">
               <Icon className="h-6 w-6 text-primary mb-3" />
               <h3 className="font-serif text-lg font-semibold">{title}</h3>
               <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{body}</p>
@@ -271,11 +271,11 @@ apprentice of [[Master Calenor]].
 
       {/* Self-hosting */}
       <section className="bg-gradient-to-br from-primary to-[hsl(252,55%,30%)] text-primary-foreground">
-        <div className="container py-16 max-w-5xl grid md:grid-cols-2 gap-10 items-center">
+        <div className="container py-12 sm:py-14 lg:py-16 max-w-5xl grid md:grid-cols-2 gap-8 sm:gap-10 items-center">
           <div>
             <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">Self-hosting</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-semibold mt-2">Run it yourself in five minutes.</h2>
-            <p className="opacity-90 mt-4 leading-relaxed">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold mt-2">Run it yourself in five minutes.</h2>
+            <p className="text-sm sm:text-base opacity-90 mt-3 sm:mt-4 leading-relaxed">
               Lorepedia is built on Next.js + Postgres. Clone the repo, set
               <code className="mx-1 rounded bg-white/15 px-1.5 py-0.5 font-mono text-sm">DATABASE_URL</code>,
               run migrations, and you have a private wiki for your studio,
@@ -295,7 +295,7 @@ apprentice of [[Master Calenor]].
               </Link>
             </div>
           </div>
-          <div className="rounded-lg bg-black/30 p-5 font-mono text-xs leading-relaxed">
+          <div className="rounded-lg bg-black/30 p-4 sm:p-5 font-mono text-[11px] sm:text-xs leading-relaxed overflow-x-auto">
             <p className="opacity-60"># 1. clone & install</p>
             <p>git clone https://github.com/rinsella/Lorepedia</p>
             <p>cd Lorepedia && npm install</p>
@@ -311,20 +311,20 @@ apprentice of [[Master Calenor]].
       </section>
 
       {/* FAQ */}
-      <section className="container py-20 max-w-3xl">
-        <div className="text-center mb-12">
+      <section className="container py-12 sm:py-16 lg:py-20 max-w-3xl">
+        <div className="text-center mb-8 sm:mb-12">
           <p className="text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--gold))] font-medium">FAQ</p>
-          <h2 className="font-serif text-4xl font-semibold mt-2">Questions, answered.</h2>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold mt-2">Questions, answered.</h2>
         </div>
         <div className="space-y-3">
           {FAQ.map((item) => (
             <details
               key={item.q}
-              className="group rounded-lg border bg-card p-5 open:bg-accent/40 transition"
+              className="group rounded-lg border bg-card p-4 sm:p-5 open:bg-accent/40 transition"
             >
-              <summary className="font-serif text-lg font-semibold cursor-pointer list-none flex items-center justify-between">
-                {item.q}
-                <span className="text-primary transition group-open:rotate-45">+</span>
+              <summary className="font-serif text-base sm:text-lg font-semibold cursor-pointer list-none flex items-center justify-between gap-3">
+                <span>{item.q}</span>
+                <span className="text-primary transition group-open:rotate-45 shrink-0">+</span>
               </summary>
               <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{item.a}</p>
             </details>
@@ -333,18 +333,18 @@ apprentice of [[Master Calenor]].
       </section>
 
       {/* Final CTA */}
-      <section className="container pb-24 max-w-3xl text-center">
-        <div className="surface-parchment rounded-2xl p-12">
-          <BrandMark size={48} className="mx-auto" />
-          <h2 className="font-serif text-3xl md:text-4xl font-semibold mt-5">
+      <section className="container pb-16 sm:pb-20 lg:pb-24 max-w-3xl text-center">
+        <div className="surface-parchment rounded-2xl p-8 sm:p-10 lg:p-12">
+          <BrandMark size={44} className="mx-auto" />
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold mt-5">
             Your universe is waiting to be archived.
           </h2>
-          <p className="text-muted-foreground mt-3">
+          <p className="text-sm sm:text-base text-muted-foreground mt-3">
             Start free. No credit card. Export anytime.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary text-primary-foreground px-6 py-3 font-medium shadow-lg shadow-primary/20 hover:opacity-90"
+            className="inline-flex items-center gap-2 mt-6 rounded-md bg-primary text-primary-foreground px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium shadow-lg shadow-primary/20 hover:opacity-90"
           >
             Create your first world <ArrowRight className="h-4 w-4" />
           </Link>

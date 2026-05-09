@@ -106,7 +106,7 @@ export default async function PublicPage({ params }: { params: Params }) {
   };
 
   return (
-    <div className="container py-8 max-w-7xl grid lg:grid-cols-[14rem_minmax(0,1fr)_18rem] gap-8">
+    <div className="container py-6 sm:py-8 max-w-7xl grid lg:grid-cols-[14rem_minmax(0,1fr)_18rem] gap-6 lg:gap-8">
       {/* Left: TOC */}
       <aside className="hidden lg:block sticky top-20 self-start">
         <TableOfContents items={toc} />
@@ -126,13 +126,13 @@ export default async function PublicPage({ params }: { params: Params }) {
           <span className="text-foreground font-medium">{page.title}</span>
         </nav>
 
-        <header className="border-b pb-5 mb-6">
-          <div className="flex items-center gap-2 mb-2">
+        <header className="border-b pb-4 sm:pb-5 mb-5 sm:mb-6">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <PageTypeBadge type={page.type} />
             <span className="text-xs text-muted-foreground">in {world.name}</span>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl font-semibold leading-tight">{page.title}</h1>
-          {page.summary && <p className="text-lg text-muted-foreground mt-3 italic">{page.summary}</p>}
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight break-words">{page.title}</h1>
+          {page.summary && <p className="text-base sm:text-lg text-muted-foreground mt-2 sm:mt-3 italic">{page.summary}</p>}
           <p className="text-xs text-muted-foreground mt-3">
             Last updated {page.updatedAt.toISOString().slice(0, 10)}
             {page.publishedAt && ` · Published ${page.publishedAt.toISOString().slice(0, 10)}`}

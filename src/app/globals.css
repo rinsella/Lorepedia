@@ -90,40 +90,40 @@
     background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.7), transparent);
   }
 
-  .prose-wiki { @apply text-[15px] leading-7 text-foreground; }
+  .prose-wiki { @apply text-[14px] leading-7 text-foreground sm:text-[15px]; }
   .prose-wiki h1, .prose-wiki h2, .prose-wiki h3, .prose-wiki h4 {
-    @apply font-serif font-semibold text-foreground;
+    @apply font-serif font-semibold text-foreground break-words;
   }
-  .prose-wiki h2 { @apply text-2xl mt-10 mb-3 pb-1 border-b border-border; }
-  .prose-wiki h3 { @apply text-xl mt-8 mb-2; }
-  .prose-wiki h4 { @apply text-lg mt-6 mb-2; }
-  .prose-wiki p { @apply my-4; }
-  .prose-wiki ul { @apply list-disc pl-6 my-4 space-y-1; }
-  .prose-wiki ol { @apply list-decimal pl-6 my-4 space-y-1; }
+  .prose-wiki h2 { @apply text-xl sm:text-2xl mt-8 sm:mt-10 mb-2 sm:mb-3 pb-1 border-b border-border; }
+  .prose-wiki h3 { @apply text-lg sm:text-xl mt-6 sm:mt-8 mb-2; }
+  .prose-wiki h4 { @apply text-base sm:text-lg mt-5 sm:mt-6 mb-2; }
+  .prose-wiki p { @apply my-3.5 sm:my-4; }
+  .prose-wiki ul { @apply list-disc pl-5 sm:pl-6 my-3.5 sm:my-4 space-y-1; }
+  .prose-wiki ol { @apply list-decimal pl-5 sm:pl-6 my-3.5 sm:my-4 space-y-1; }
   .prose-wiki blockquote {
-    @apply my-6 border-l-4 border-primary/40 bg-accent/40 px-4 py-2 italic text-foreground/80 rounded-r;
+    @apply my-5 sm:my-6 border-l-4 border-primary/40 bg-accent/40 px-3 sm:px-4 py-2 italic text-foreground/80 rounded-r;
   }
-  .prose-wiki code { @apply rounded bg-muted px-1 py-0.5 font-mono text-[0.92em]; }
-  .prose-wiki pre { @apply my-6 overflow-x-auto rounded-lg bg-foreground/[.05] p-4 text-sm; }
+  .prose-wiki code { @apply rounded bg-muted px-1 py-0.5 font-mono text-[0.88em] break-words; }
+  .prose-wiki pre { @apply my-5 sm:my-6 overflow-x-auto rounded-lg bg-foreground/[.05] p-3 sm:p-4 text-xs sm:text-sm; }
   .prose-wiki pre code { @apply bg-transparent p-0; }
-  .prose-wiki a { @apply text-primary underline-offset-2 hover:underline; }
-  .prose-wiki table { @apply my-6 w-full border-collapse text-sm; }
-  .prose-wiki th, .prose-wiki td { @apply border border-border px-3 py-2 text-left; }
+  .prose-wiki a { @apply text-primary underline-offset-2 hover:underline break-words; }
+  .prose-wiki table { @apply my-5 sm:my-6 w-full border-collapse text-xs sm:text-sm block sm:table overflow-x-auto whitespace-nowrap sm:whitespace-normal; }
+  .prose-wiki th, .prose-wiki td { @apply border border-border px-2 sm:px-3 py-1.5 sm:py-2 text-left; }
   .prose-wiki th { @apply bg-muted font-semibold; }
-  .prose-wiki hr { @apply my-8 border-border; }
-  .prose-wiki img { @apply my-4 rounded-md border border-border; }
+  .prose-wiki hr { @apply my-6 sm:my-8 border-border; }
+  .prose-wiki img { @apply my-4 rounded-md border border-border max-w-full h-auto; }
 
   .wikilink { @apply text-primary underline-offset-2 hover:underline; }
   .wikilink-broken { @apply text-destructive/80 italic; }
 
   .infobox {
-    @apply float-none md:float-right md:ml-6 md:mb-4 w-full md:w-72 rounded-lg border bg-card text-sm shadow-sm overflow-hidden;
+    @apply float-none md:float-right md:ml-6 md:mb-4 w-full md:w-72 max-w-full rounded-lg border bg-card text-sm shadow-sm overflow-hidden mb-6;
   }
   .infobox-header {
-    @apply bg-gradient-to-br from-primary to-[hsl(252,55%,38%)] text-primary-foreground px-4 py-3 font-serif font-semibold;
+    @apply bg-gradient-to-br from-primary to-[hsl(252,55%,38%)] text-primary-foreground px-3 sm:px-4 py-2.5 sm:py-3 font-serif font-semibold;
   }
   .infobox-row {
-    @apply grid grid-cols-[1fr_2fr] gap-2 px-4 py-2 border-t border-border first:border-t-0;
+    @apply grid grid-cols-[1fr_2fr] gap-2 px-3 sm:px-4 py-1.5 sm:py-2 border-t border-border first:border-t-0 text-[13px] sm:text-sm;
   }
   .infobox-key { @apply text-muted-foreground font-medium; }
 }

@@ -3,7 +3,11 @@ module.exports = {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx,js,jsx,mdx}"],
   theme: {
-    container: { center: true, padding: "1rem", screens: { "2xl": "1280px" } },
+    container: {
+      center: true,
+      padding: { DEFAULT: "0.875rem", sm: "1.25rem", lg: "2rem" },
+      screens: { "2xl": "1280px" },
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
