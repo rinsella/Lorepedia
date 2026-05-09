@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -15,8 +16,12 @@ export default async function NewPage({ params }: { params: { slug: string } }) 
 
   return (
     <div className="space-y-6">
-      <h1 className="font-serif text-2xl font-semibold">New page in {world.name}</h1>
-      <NewPageForm worldId={world.id} />
+      <div>
+        <Link href={`/dashboard/worlds/${world.slug}`} className="text-xs text-muted-foreground hover:underline">← {world.name}</Link>
+        <h1 className="font-serif text-3xl font-semibold mt-1">New page</h1>
+        <p className="text-sm text-muted-foreground">Create a new entry in <span className="font-medium">{world.name}</span>.</p>
+      </div>
+      <NewPageForm worldId={world.id} worldSlug={world.slug} />
     </div>
   );
 }

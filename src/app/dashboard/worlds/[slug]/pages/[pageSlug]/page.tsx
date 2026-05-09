@@ -45,6 +45,7 @@ export default async function EditPage({ params }: { params: { slug: string; pag
 
       {editable ? (
         <EditPageForm
+          worldSlug={world.slug}
           page={{
             id: page.id,
             title: page.title,

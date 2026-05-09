@@ -21,7 +21,7 @@ export default async function WorldSettings({ params }: { params: { slug: string
         <h1 className="font-serif text-2xl font-semibold">World settings</h1>
       </header>
 
-      <form action={updateWorld} className="space-y-4">
+      <form action={async (fd: FormData) => { "use server"; await updateWorld(undefined, fd); }} className="space-y-4">
         <input type="hidden" name="id" value={world.id} />
         <div>
           <label className="text-sm font-medium">Name</label>

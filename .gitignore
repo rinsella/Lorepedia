@@ -31,3 +31,4 @@ test-results
 
 # prisma
 prisma/migrations/dev.db*
+tsconfig.tsbuildinfo

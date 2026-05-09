@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fbf6e9"/>
+      <stop offset="1" stop-color="#efe5cc"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="900" cy="200" r="450" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5b3fb6" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#5b3fb6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="160" y2="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5b3fb6"/><stop offset="1" stop-color="#3a256e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+  <g transform="translate(120,120)">
+    <rect width="160" height="160" rx="32" fill="url(#mark)"/>
+    <path d="M80 32l8 19 20 1.8-15.2 13.6 4.6 19.6L80 75l-17.4 11 4.6-19.6L52 52.8l20-1.8 8-19z" fill="#f5d98a"/>
+  </g>
+  <text x="120" y="380" font-family="Georgia, serif" font-size="84" font-weight="600" fill="#1a1530">Lorepedia</text>
+  <text x="120" y="450" font-family="Georgia, serif" font-size="36" fill="#3a256e">Build your fictional universe</text>
+  <text x="120" y="500" font-family="Georgia, serif" font-size="36" fill="#3a256e">as a living wiki.</text>
+  <text x="120" y="570" font-family="ui-sans-serif, system-ui" font-size="22" fill="#5a4f3a">Worlds · Wikis · Lore · Self-hostable</text>
+</svg>
