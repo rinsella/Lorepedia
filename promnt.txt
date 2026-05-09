@@ -1,0 +1,1313 @@
+Lorepedia.net Full-Stack Build Prompt
+Lorepedia.net
+Full-Stack AI Build Prompt for GitHub Copilot / Cursor / Claude Code
+Online worldbuilding wiki, blog, knowledge base, and creator workspace
+Project domain lorepedia.net
+Product idea A web-based, multi-user worldbuilding wiki similar in
+purpose to an online Wikipedia for fictional universes,
+lore, RPG campaigns, novels, games, comics, and
+collaborative story bibles.
+Build target A production-ready full-stack web app with user
+dashboard, public wiki pages, admin panel, superadmin
+panel, editor, templates, importer/exporter, comments,
+moderation, SEO, deployment config, and database
+schema.
+Design direction Inspired by the clean, creator-friendly worldbuilding
+positioning of Chronicler: wiki-style pages, backlinks,
+infoboxes, templates, privacy, ownership, and a polished
+modern landing page. Do not copy exact assets, text,
+logos, or proprietary UI. Create an original Lorepedia
+visual identity.
+Recommended stack Next.js 15 App Router + TypeScript + Tailwind CSS +
+shadcn/ui + PostgreSQL + Prisma + Auth.js/NextAuth +
+S3-compatible storage + Docker.
+Deployment targets Railway, Render, VPS, Docker Compose, and any
+Node/PostgreSQL environment.
+Generated prompt document - use the main prompt below as the master instruction for your coding AI.
+Lorepedia.net Full-Stack Build Prompt
+Important implementation note
+This document is a build prompt, not final application code. Paste the master prompt into GitHub Copilot
+Chat, Cursor, Claude Code, or another coding agent. Ask it to build incrementally, commit often, and verify
+every module. The app must be original. It may be inspired by the product category and high-level feature
+patterns of offline worldbuilding tools, but it must not copy Chronicler branding, exact content, artwork,
+or proprietary source code.
+Reference product observations used for inspiration
+ Chronicler positions itself as a free offline worldbuilding tool and local wiki for writers, novelists, and
+tabletop RPG game masters.
+ Relevant feature patterns include wiki-style [[wikilinks]], backlinks, infoboxes, templates, split
+editor/preview, tags, spoiler blocks, custom themes, importers, image galleries, page inserts, and vault
+diagnostics.
+ Lorepedia.net should reinterpret those patterns for an online multi-user SaaS/community website:
+creator workspaces, private/public worlds, public wiki pages, blog-like articles, moderation, user roles,
+SEO, backups, and deployment-ready infrastructure.
+How to use this prompt
+ Paste the entire MASTER PROMPT section into GitHub Copilot Chat or Cursor Composer.
+ Tell the AI to generate the repository step-by-step, beginning with architecture, dependencies, Prisma
+schema, auth, layout, and core CRUD.
+ After each generated phase, run the app locally and ask the AI to fix errors before continuing.
+ Do not request every advanced feature in one single code generation if the model struggles. Use the
+phased roadmap at the end.
+Lorepedia.net Full-Stack Build Prompt
+MASTER PROMPT TO GENERATE LOREPEDIA.NET
+Copy everything from this section into your coding AI. The prompt is written in English because the
+codebase, comments, docs, and UI copy should be international-ready.
+Role and Goal
+You are a senior full-stack product engineer, UI/UX designer, database architect, DevOps engineer, and security-focused
+SaaS builder. Build a production-ready web application named "Lorepedia" for the domain lorepedia.net.
+Lorepedia is an online worldbuilding wiki platform for writers, novelists, tabletop RPG game masters, game developers,
+comic creators, anime story creators, and hobby worldbuilders. The core idea is: "Create your own online universe wiki."
+The website should feel like a mix of Wikipedia, a polished blog/CMS, an Obsidian-like knowledge base, and a dedicated
+worldbuilding workspace.
+Important: Do not copy any proprietary source code, logo, images, text, or exact visual layout from Chronicler or any
+other product. However, the product category and high-level feature inspiration should be similar: wiki-style pages,
+[[wikilinks]], backlinks, tags, infoboxes, templates, private ownership, import/export, custom themes, and fast writing
+workflows. Lorepedia must be original, web-based, multi-user, deployable, and extensible.
+Primary Product Positioning
+Brand name: Lorepedia
+Domain: lorepedia.net
+Tagline: Your online universe wiki.
+Alternative tagline: Build your world. Connect every story.
+Product promise: Lorepedia helps creators build structured, beautiful, searchable world wikis with characters, locations,
+factions, timelines, artifacts, maps, articles, templates, and collaborative publishing.
+Core differentiator from offline tools: This is not a desktop-only vault. Lorepedia is an online creator platform with
+private drafts, public wiki publishing, collaborative worlds, comments, SEO pages, admin moderation, and optional
+export so users still own their data.
+Business model for now: free project, no paywall required. Still design the database to support future plans such as Pro
+accounts, storage limits, team seats, donations, and optional subscriptions, but keep all MVP features free.
+Technical Stack Requirements
+Use this stack unless there is a strong reason to improve it:
+- Framework: Next.js 15+ with App Router and TypeScript.
+- UI: Tailwind CSS, shadcn/ui, Radix UI primitives, lucide-react icons.
+- Database: PostgreSQL.
+- ORM: Prisma.
+- Auth: Auth.js / NextAuth with credentials login and optional OAuth-ready structure.
+- Password hashing: bcrypt or argon2.
+- Editor: TipTap editor with Markdown support OR a robust Markdown editor with live preview. Prefer TipTap if stable.
+- Markdown pipeline: remark/rehype for rendering, sanitization, slugging, table of contents, and safe HTML.
+- Search: PostgreSQL full-text search for MVP; design a future adapter for Meilisearch/Typesense.
+- File storage: local filesystem in dev; S3-compatible abstraction for production using AWS S3, Cloudflare R2, MinIO, or
+Railway volumes.
+Lorepedia.net Full-Stack Build Prompt
+- Validation: Zod.
+- Forms: React Hook Form + Zod resolver.
+- State/query: TanStack Query where useful, otherwise server actions for simple mutations.
+- Email: Resend-ready abstraction; do not require email to run locally.
+- Rate limit: Upstash Redis-ready abstraction or database-backed fallback.
+- Testing: Vitest for unit tests, Playwright for important e2e paths.
+- Deployment: Dockerfile, docker-compose.yml, Railway config notes, Render config notes, VPS deployment
+docs, .env.example.
+- Code quality: ESLint, Prettier, strict TypeScript, clean folder structure.
+The app must run with:
+1. npm install
+2. cp .env.example .env
+3. docker compose up -d postgres
+4. npx prisma migrate dev
+5. npm run dev
+Also provide production build support:
+- npm run build
+- npm run start
+- Docker production image
+- database migration command
+- seed script for superadmin and demo world.
+Visual Design Direction
+Create an original Lorepedia identity inspired by modern worldbuilding tools and wiki products.
+Overall mood:
+- Elegant, magical, scholarly, modern, readable, fast.
+- A premium online archive for fictional worlds.
+- It should feel creator-friendly rather than corporate.
+- Avoid clutter. Make it beautiful but practical.
+Color palette:
+- Default theme: deep ink navy / charcoal background, parchment cards, muted gold accents, soft violet or blue highlights.
+- Light theme: warm parchment background, ink text, subtle borders, gold accent.
+- Dark theme: #0B1020 / #111827 surfaces, #F8E7C0 parchment highlights, #C8A96A gold accents.
+- Use CSS variables so users can create custom world themes later.
+Landing page layout inspiration:
+- Hero section with large title "Lorepedia" and tagline "Your online universe wiki".
+- Primary CTA: "Start Building Free".
+- Secondary CTA: "Explore Demo World".
+- Feature cards for wiki links, infoboxes, timelines, maps, templates, backlinks, public publishing, and export.
+- Product screenshot mockup: a split-screen editor with article preview, infobox, backlinks panel, and world sidebar.
+Lorepedia.net Full-Stack Build Prompt
+- Community/creator positioning section.
+- Comparison section: "Why not just use Notion or random docs?" with respectful comparison.
+- Footer with product, resources, legal, community.
+App layout:
+- Left sidebar: current world, search, page tree, categories, templates, media, settings.
+- Top bar: breadcrumbs, quick create, command palette, theme toggle, user menu.
+- Main content: article/editor area.
+- Right sidebar: infobox, backlinks, page outline, related pages, metadata.
+- Mobile responsive: collapsible sidebars, bottom action bar if needed.
+UI components to build:
+- AppShell
+- MarketingLayout
+- DashboardLayout
+- AdminLayout
+- WorldSidebar
+- PageEditor
+- PagePreview
+- InfoboxCard
+- BacklinksPanel
+- TagPills
+- CommandPalette
+- EmptyState
+- UploadDropzone
+- SettingsTabs
+- AuditLogTable
+- ModerationQueue
+- AnalyticsCards
+Accessibility:
+- Keyboard navigation for command palette and editor actions.
+- Sufficient contrast.
+- Semantic headings.
+- Visible focus states.
+- Responsive layout for mobile/tablet/desktop.
+Core User Roles
+Implement role-based access control. Use enums in the database and helper functions in code.
+Global platform roles:
+- GUEST: unauthenticated visitor.
+- USER: normal registered user.
+- VERIFIED_USER: optional future role for trusted users.
+- MODERATOR: can review reports, hide public content, manage comments.
+Lorepedia.net Full-Stack Build Prompt
+- ADMIN: can manage platform settings, users, content moderation, announcements, categories, and site settings.
+- SUPERADMIN: full control including admin management, system settings, backups, exports, dangerous maintenance
+actions.
+World-level roles:
+- OWNER: creator of a world, full permissions.
+- CO_OWNER: nearly full permissions except deleting/transferring ownership.
+- EDITOR: can create and edit pages.
+- WRITER: can create drafts and suggest edits.
+- VIEWER: can view private world content if invited.
+- COMMENTER: can comment but not edit.
+Permissions must be enforced server-side, not only hidden in UI.
+Main User Features
+Build the complete MVP with these user-facing features:
+1. Authentication
+- Register with name, email, password.
+- Login/logout.
+- Password hashing.
+- Forgot password flow architecture, even if email provider is optional.
+- Email verification-ready architecture.
+- User profile with avatar, bio, website, social links.
+- Public profile page listing public worlds and articles.
+2. Dashboard
+- Overview cards: worlds, pages, recent edits, public views, storage used.
+- Recent worlds.
+- Recent pages.
+- Quick actions: create world, create page, import, explore public worlds.
+- Getting started checklist.
+3. Worlds
+- Create, edit, archive, delete worlds.
+- World fields: name, slug, description, visibility, cover image, icon, theme, language, default license, content rating,
+owner.
+- Visibility modes: PRIVATE, UNLISTED, PUBLIC.
+- Public world homepage: overview, featured pages, categories, timeline preview, map preview, recent articles.
+- World settings: general, members, roles, themes, imports/exports, backups, danger zone.
+4. Wiki Pages
+- Page types: ARTICLE, CHARACTER, LOCATION, FACTION, ITEM, EVENT, TIMELINE, MAP, NOTE, BLOG_POST,
+TEMPLATE.
+- Fields: title, slug, summary, markdown/content JSON, page type, status, visibility, tags, category, parent page, cover
+image, icon, metadata, createdBy, updatedBy.
+Lorepedia.net Full-Stack Build Prompt
+- Statuses: DRAFT, REVIEW, PUBLISHED, ARCHIVED.
+- Support nested pages and folders.
+- Auto-slug generation and collision handling.
+- Version history for every page.
+- Restore previous version.
+- Soft delete with trash.
+5. Editor
+- Rich editor or Markdown editor with live preview.
+- Split-screen mode: editor left, preview right.
+- Toolbar: headings, bold, italic, links, images, tables, quote, code, spoiler, infobox, callout.
+- Auto-save drafts.
+- Manual save.
+- Publish button.
+- Preview public page.
+- Insert internal link by typing [[.
+- Internal page search while creating [[wikilinks]].
+- Create missing linked page from unresolved wikilink.
+- Insert template.
+- Insert infobox.
+- Insert page include.
+- Insert spoiler block using syntax like ||secret||.
+- Frontmatter/YAML metadata support for advanced users.
+6. Wiki Links and Backlinks
+- Parse [[Page Title]] and [[Page Title|Custom Label]].
+- Store links in PageLink table.
+- Show outgoing links.
+- Show backlinks to current page.
+- Show unresolved links.
+- Diagnostics page for broken links and orphaned pages.
+7. Infoboxes
+- Built-in infobox templates for Character, Location, Faction, Item, Event, Creature, Magic System, Technology,
+Organization.
+- Custom fields per world.
+- Render infobox in right sidebar on public pages.
+- Allow fields like image, aliases, type, status, location, affiliation, birth date, death date, relationships.
+- Store infobox data as JSON with validation by template schema.
+8. Templates
+- Built-in page templates.
+- User-created templates per world.
+- Template variables like {{worldName}}, {{pageTitle}}, {{date}}, {{creatorName}}.
+- Template gallery.
+Lorepedia.net Full-Stack Build Prompt
+9. Tags and Categories
+- Tags per world.
+- Categories/folders with hierarchy.
+- Tag pages that list all pages with the tag.
+- Category pages.
+10. Public Publishing
+- Public pages should be SEO-friendly and readable without login.
+- URLs: /w/[worldSlug], /w/[worldSlug]/[pageSlug], /u/[username], /explore.
+- Open Graph metadata.
+- Public/private toggle per page.
+- World-level default visibility.
+- Unlisted links.
+11. Blog-like Articles
+- Each world can have blog posts / devlogs / campaign journals.
+- Blog index per world.
+- Global explore feed for public posts.
+- SEO metadata and cover images.
+12. Comments and Reactions
+- Comments on public pages if enabled by world owner.
+- Nested replies one level deep.
+- Reactions: like, bookmark, follow world.
+- Moderation tools for owner/admin.
+- Report comment/content.
+13. Search
+- Global public search.
+- Private dashboard search within user worlds.
+- World-specific search.
+- Search by title, content, tag, type.
+- Include filters by page type, status, visibility, tag, author, updated date.
+14. Media Library
+- Upload images/files.
+- Attach media to worlds/pages.
+- Storage abstraction.
+- Image alt text.
+- File size limits configurable by admin.
+- Support cover images, gallery blocks, page attachments.
+15. Timeline
+- Create events with dates.
+Lorepedia.net Full-Stack Build Prompt
+- Support fictional calendars later, but MVP can use flexible date strings plus sortable numeric order.
+- Timeline view per world.
+- Link events to pages.
+- Event fields: title, description, dateLabel, startSort, endSort, relatedPages.
+16. Maps / Atlas MVP
+- Upload a map image.
+- Add pins with x/y percent coordinates.
+- Pin links to pages.
+- Public map viewer.
+- Admin/user can manage pins.
+- Future-ready for map layers.
+17. Relationship Graph MVP
+- Visualize page links using a simple graph component.
+- Nodes are pages; edges are wikilinks.
+- Filter by page type.
+- Keep it lightweight.
+18. Import / Export
+- Import Markdown files as pages.
+- Import ZIP of Markdown files with folders.
+- Import basic MediaWiki XML later; add TODO adapter.
+- Export world as ZIP containing Markdown, JSON metadata, and media manifest.
+- Export page as Markdown.
+- Export public page as PDF optional future.
+19. World Diagnostics
+- Broken wikilinks.
+- Orphan pages.
+- Empty pages.
+- Duplicate slugs.
+- Missing infobox required fields.
+- Large media files.
+- Unpublished drafts.
+- Pages without tags/categories.
+20. Notifications
+- In-app notifications for comments, invites, role changes, mentions, reports.
+- Notification table and dropdown.
+- Email notification adapter optional.
+21. Settings
+- Account settings.
+- Password change.
+Lorepedia.net Full-Stack Build Prompt
+- Theme preference.
+- Delete account flow with safeguards.
+- Export personal data.
+- World settings and platform settings.
+Admin Panel Requirements
+Build a complete /admin panel for ADMIN and SUPERADMIN roles.
+Admin dashboard:
+- Stats cards: total users, new users, total worlds, public worlds, pages, comments, reports, storage used.
+- Recent signups.
+- Recent published pages.
+- Moderation queue.
+- System health summary.
+User management:
+- List/search/filter users.
+- View user detail.
+- Change user role, except SUPERADMIN unless current user is SUPERADMIN.
+- Suspend/unsuspend user.
+- Mark email verified.
+- Reset password token generation architecture.
+- View user worlds, pages, reports, storage usage.
+- Add admin notes about user.
+Content moderation:
+- List public worlds, pages, comments.
+- Hide/unhide content.
+- Feature/unfeature worlds.
+- Review reports.
+- Apply moderation status: pending, reviewed, actioned, rejected.
+- Record moderator notes.
+Platform settings:
+- Site name, tagline, logo URL, favicon URL.
+- Maintenance mode.
+- Registration enabled/disabled.
+- Public explore enabled/disabled.
+- Max worlds per user.
+- Max storage per user.
+- Max upload size.
+- Allowed file types.
+- Default user role.
+- Require email verification toggle.
+- Comments globally enabled toggle.
+Lorepedia.net Full-Stack Build Prompt
+- AI helper toggle placeholder.
+- Analytics script field placeholder, sanitized.
+- SEO defaults: title, description, social image.
+Announcements:
+- Create site-wide announcement banners.
+- Schedule start/end date.
+- Severity: info, warning, success, urgent.
+Theme management:
+- Manage default platform themes.
+- Create theme presets: Arcane Dark, Parchment Light, Scholar Blue, Emerald Realm, Crimson Empire.
+- World owners can apply presets.
+Templates management:
+- Manage global templates available to all users.
+- Version templates.
+- Enable/disable templates.
+Audit logs:
+- All admin actions must be logged.
+- Include actor, action, target type, target ID, IP if available, user agent, timestamp, metadata JSON.
+Admin security:
+- Admin routes protected server-side.
+- No admin client-only checks.
+- Dangerous actions require confirmation.
+Superadmin Panel Requirements
+Build /superadmin or add superadmin-only sections inside /admin.
+SUPERADMIN-only features:
+- Create/demote admins.
+- View all system settings.
+- Database backup/export trigger architecture.
+- Export all platform data as JSON/ZIP for migration.
+- Import migration data placeholder with safe validation.
+- View environment diagnostics without leaking secrets.
+- Clear cache placeholder.
+- Rebuild search index placeholder.
+- Manage maintenance mode.
+- Manage storage provider settings UI placeholders, but never display secret values.
+- Manage OAuth provider toggles placeholders.
+- Manage SMTP/Resend provider placeholders.
+- Delete or transfer ownership of abandoned worlds.
+Lorepedia.net Full-Stack Build Prompt
+- View audit log with filters.
+- View background job queue placeholder.
+Data migration feature:
+Create a superadmin settings page called "Export & Migration" with:
+- Export users JSON.
+- Export worlds JSON.
+- Export pages JSON.
+- Export media manifest JSON.
+- Export full backup ZIP.
+- Import backup ZIP placeholder, disabled by default with warning.
+- Instructions: use backups before redeploying or moving from Railway to VPS.
+Never expose passwords, password hashes, tokens, sessions, OAuth secrets, reset tokens, or private environment
+variables in exports unless explicitly building a secure internal backup process. For user-facing exports, omit sensitive
+fields.
+Database Schema Requirements
+Design Prisma models. Include at least these entities:
+User
+- id, email, emailVerified, username, name, image, bio, website, role, status, passwordHash, createdAt, updatedAt,
+lastLoginAt
+Account / Session / VerificationToken
+- Auth.js compatible models if using NextAuth.
+World
+- id, ownerId, name, slug, description, visibility, status, coverImageId, icon, themeId, language, contentRating, license,
+settingsJson, createdAt, updatedAt
+WorldMember
+- id, worldId, userId, role, invitedById, createdAt, updatedAt
+Page
+- id, worldId, parentId, createdById, updatedById, title, slug, summary, type, status, visibility, contentMarkdown,
+contentJson, infoboxJson, metadataJson, coverImageId, publishedAt, createdAt, updatedAt, deletedAt
+PageVersion
+- id, pageId, versionNumber, title, contentMarkdown, contentJson, infoboxJson, metadataJson, createdById, createdAt,
+changeSummary
+PageLink
+- id, worldId, fromPageId, toPageId nullable, targetTitle, targetSlug nullable, label nullable, isResolved, createdAt
+Tag
+Lorepedia.net Full-Stack Build Prompt
+- id, worldId, name, slug, color
+PageTag
+- pageId, tagId
+Category
+- id, worldId, parentId, name, slug, description
+Template
+- id, worldId nullable for global templates, createdById, name, slug, type, description, contentMarkdown, schemaJson,
+isGlobal, isEnabled, createdAt, updatedAt
+MediaAsset
+- id, ownerId, worldId nullable, pageId nullable, storageKey, url, filename, mimeType, sizeBytes, width, height, altText,
+createdAt
+Comment
+- id, pageId, userId, parentId nullable, body, status, createdAt, updatedAt, deletedAt
+Reaction
+- id, userId, targetType, targetId, type, createdAt
+Follow
+- id, userId, worldId, createdAt
+Bookmark
+- id, userId, pageId, createdAt
+TimelineEvent
+- id, worldId, pageId nullable, title, description, dateLabel, startSort, endSort, color, createdAt, updatedAt
+Map
+- id, worldId, name, slug, imageId, description, createdAt, updatedAt
+MapPin
+- id, mapId, pageId nullable, title, description, xPercent, yPercent, color, icon, createdAt, updatedAt
+Report
+- id, reporterId, targetType, targetId, reason, details, status, assignedToId, moderatorNote, createdAt, updatedAt
+Notification
+- id, userId, type, title, body, href, readAt, metadataJson, createdAt
+SiteSetting
+- key, valueJson, updatedById, updatedAt
+Lorepedia.net Full-Stack Build Prompt
+Theme
+- id, ownerId nullable, worldId nullable, name, slug, cssVariablesJson, isGlobal, createdAt, updatedAt
+AuditLog
+- id, actorId nullable, action, targetType, targetId nullable, ip, userAgent, metadataJson, createdAt
+Invite
+- id, worldId, email, role, tokenHash, invitedById, expiresAt, acceptedAt, createdAt
+Create enums:
+- UserRole, UserStatus, WorldVisibility, WorldStatus, WorldMemberRole, PageType, PageStatus, PageVisibility,
+CommentStatus, ReportStatus, ReactionType.
+Add indexes for:
+- unique User.email and User.username
+- unique World.slug
+- unique Page(worldId, slug)
+- Page title search
+- Page updatedAt
+- Page worldId/status/visibility
+- PageLink worldId/fromPageId/toPageId
+- Tag unique worldId slug
+- Category unique worldId slug
+- AuditLog actorId createdAt
+Use soft delete where appropriate.
+Routing and Page Structure
+Implement Next.js App Router with a clean route tree:
+Public marketing:
+/ Landing page
+/pricing Free plan and future roadmap
+/features Feature overview
+/explore Public worlds and public pages
+/blog Platform blog placeholder
+/changelog Public changelog placeholder
+/privacy Privacy policy
+/terms Terms
+/contact Contact page
+Auth:
+/login
+/register
+Lorepedia.net Full-Stack Build Prompt
+/forgot-password
+/reset-password/[token]
+/verify-email/[token]
+User app:
+/dashboard
+/dashboard/worlds
+/dashboard/worlds/new
+/dashboard/worlds/[worldId]
+/dashboard/worlds/[worldId]/pages
+/dashboard/worlds/[worldId]/pages/new
+/dashboard/worlds/[worldId]/pages/[pageId]/edit
+/dashboard/worlds/[worldId]/media
+/dashboard/worlds/[worldId]/timeline
+/dashboard/worlds/[worldId]/maps
+/dashboard/worlds/[worldId]/templates
+/dashboard/worlds/[worldId]/diagnostics
+/dashboard/worlds/[worldId]/settings
+/dashboard/settings
+/dashboard/notifications
+Public world/wiki:
+/u/[username]
+/w/[worldSlug]
+/w/[worldSlug]/page/[pageSlug]
+/w/[worldSlug]/blog
+/w/[worldSlug]/blog/[postSlug]
+/w/[worldSlug]/timeline
+/w/[worldSlug]/map/[mapSlug]
+/w/[worldSlug]/tags/[tagSlug]
+/w/[worldSlug]/categories/[categorySlug]
+Admin:
+/admin
+/admin/users
+/admin/users/[userId]
+/admin/worlds
+/admin/pages
+/admin/comments
+/admin/reports
+/admin/templates
+/admin/themes
+/admin/announcements
+/admin/settings
+/admin/audit-logs
+Lorepedia.net Full-Stack Build Prompt
+/admin/export-migration (superadmin only)
+API routes if needed:
+/api/upload
+/api/search
+/api/admin/*
+/api/webhooks/*
+Use route groups:
+(app), (marketing), (auth), (admin), (public).
+API, Server Actions, and Services
+Create a service-oriented structure. Avoid putting all logic inside React components.
+Suggested folders:
+/src/app
+/src/components
+/src/components/ui
+/src/features/auth
+/src/features/worlds
+/src/features/pages
+/src/features/editor
+/src/features/admin
+/src/features/media
+/src/features/search
+/src/features/public
+/src/lib/db.ts
+/src/lib/auth.ts
+/src/lib/permissions.ts
+/src/lib/storage.ts
+/src/lib/markdown.ts
+/src/lib/wikilinks.ts
+/src/lib/slug.ts
+/src/lib/rate-limit.ts
+/src/lib/audit.ts
+/src/lib/settings.ts
+/src/lib/email.ts
+/src/server/actions
+/src/server/services
+/prisma/schema.prisma
+/prisma/seed.ts
+Important services:
+- authService
+- userService
+Lorepedia.net Full-Stack Build Prompt
+- worldService
+- pageService
+- wikilinkService
+- backlinkService
+- templateService
+- mediaService
+- searchService
+- adminService
+- moderationService
+- settingsService
+- auditService
+- exportService
+- importService
+Every mutation must:
+1. Validate input with Zod.
+2. Check authentication.
+3. Check permissions.
+4. Perform database transaction if multiple tables are updated.
+5. Write audit log when important.
+6. Return typed result or throw controlled error.
+Use optimistic UI carefully only when safe.
+Markdown, Wiki Syntax, and Rendering Rules
+Implement a markdown rendering pipeline:
+- Support headings, lists, tables, blockquotes, code, links, images.
+- Sanitize user-generated HTML.
+- Generate heading IDs and table of contents.
+- Convert [[Page Title]] to internal Lorepedia links.
+- Convert [[Page Title|Label]] to internal links with custom label.
+- Unresolved links should render with a special style and create-page action for editors.
+- Support spoilers using ||spoiler content|| and render as clickable reveal blocks.
+- Support callouts like:
+ > [!NOTE]
+ > Content
+- Support page includes with syntax:
+ {{page:Page Title}}
+ Render only if allowed and prevent circular includes.
+- Support infobox block or frontmatter:
+ ---
+ type: character
+ aliases: [Name A, Name B]
+ status: Alive
+ ---
+Lorepedia.net Full-Stack Build Prompt
+Security:
+- Never allow raw unsafe scripts.
+- Sanitize HTML output.
+- Validate image URLs.
+- Prevent XSS in markdown, comments, profile fields, and settings.
+Wikilink parser:
+- Extract links on save.
+- Normalize titles and slugs.
+- Store resolved/unresolved links in PageLink.
+- Update backlinks when page title/slug changes.
+Permission Matrix
+Implement permission helper functions, for example:
+- canViewWorld(user, world)
+- canEditWorld(user, world)
+- canDeleteWorld(user, world)
+- canCreatePage(user, world)
+- canEditPage(user, page)
+- canPublishPage(user, page)
+- canModerateComment(user, comment)
+- canAccessAdmin(user)
+- canAccessSuperadmin(user)
+Rules:
+- SUPERADMIN can do everything.
+- ADMIN can moderate and manage most platform content but cannot demote SUPERADMIN.
+- MODERATOR can moderate reports/comments/public content but cannot change platform settings.
+- World OWNER controls their world and members.
+- Private world content is visible only to members with permission.
+- Public world pages are visible to guests only when page visibility/status permits.
+- Draft pages are never publicly visible.
+- Unlisted pages require URL but still must be published.
+- Soft-deleted pages are hidden except to owners/admins.
+Security Requirements
+Security must be treated as a first-class requirement:
+Authentication and sessions:
+- Hash passwords with bcrypt/argon2.
+- Secure cookies.
+- CSRF protection for credentials auth/server actions where applicable.
+- Use httpOnly cookies.
+- Do not log sensitive data.
+Lorepedia.net Full-Stack Build Prompt
+Authorization:
+- Server-side permission checks on every mutation and protected read.
+- Never trust client role data.
+Input validation:
+- Zod schemas for every form/action/API.
+- Sanitize markdown/comment/profile content.
+- Validate file uploads by MIME and extension.
+Rate limiting:
+- Login attempts.
+- Registration.
+- Comment posting.
+- File uploads.
+- Search endpoint.
+- Report submission.
+Abuse prevention:
+- Honeypot field on public forms.
+- CAPTCHA-ready adapter for registration/login/comments if enabled in admin settings. Support Cloudflare Turnstile,
+hCaptcha, or Google reCAPTCHA config placeholders.
+- Admin setting fields for CAPTCHA provider, site key, secret key. Show only masked secret.
+Privacy:
+- Users can export their data.
+- Users can delete their account.
+- Private worlds must not appear in public search or sitemap.
+- robots.txt should not expose private content.
+Headers:
+- Add sane security headers in next.config or middleware.
+- Content Security Policy with reasonable defaults, but allow images from configured storage.
+File uploads:
+- Limit file size.
+- Store outside public path when using local storage or use signed URLs where appropriate.
+- Rename files with safe unique keys.
+- Never execute uploaded files.
+Admin safety:
+- Audit log all admin/superadmin changes.
+- Confirm dangerous actions.
+- Avoid exposing ENV secrets in UI.
+- Export process must avoid password hashes unless internal full backup is explicitly protected.
+Lorepedia.net Full-Stack Build Prompt
+SEO and Public Website Requirements
+Build Lorepedia so public pages can rank well:
+- Dynamic metadata for public worlds and pages.
+- Open Graph title, description, image.
+- Twitter card metadata.
+- Canonical URLs.
+- Sitemap generation only for public published content.
+- robots.txt.
+- Clean semantic HTML article pages.
+- Breadcrumbs.
+- JSON-LD structured data for CreativeWork/Article where appropriate.
+- Fast loading.
+- Image optimization.
+- Public explore pages with filters.
+- Slugs should be human-readable.
+Landing page copy should be original:
+Hero headline: "Build your fictional universe as a living wiki."
+Subheadline: "Lorepedia gives writers, GMs, and creators a beautiful online workspace for characters, locations, factions,
+timelines, maps, and interconnected lore."
+CTA: "Start Building Free"
+CTA secondary: "Explore Demo World"
+Avoid claiming features that are not implemented. Use "Coming soon" badges for advanced features not ready.
+Deployment Requirements
+Provide deployment-ready files and documentation.
+Files required:
+- .env.example
+- Dockerfile
+- docker-compose.yml with app + postgres + optional minio
+- railway.json or Railway deployment notes
+- render.yaml or Render deployment notes
+- DEPLOYMENT.md
+- README.md
+- CONTRIBUTING.md optional
+- LICENSE placeholder
+Environment variables:
+DATABASE_URL=
+NEXTAUTH_URL=
+NEXTAUTH_SECRET=
+APP_URL=
+STORAGE_DRIVER=local|s3
+Lorepedia.net Full-Stack Build Prompt
+LOCAL_UPLOAD_DIR=./uploads
+S3_ENDPOINT=
+S3_REGION=
+S3_BUCKET=
+S3_ACCESS_KEY_ID=
+S3_SECRET_ACCESS_KEY=
+EMAIL_PROVIDER=none|resend|smtp
+RESEND_API_KEY=
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASSWORD=
+CAPTCHA_PROVIDER=none|turnstile|hcaptcha|recaptcha
+CAPTCHA_SITE_KEY=
+CAPTCHA_SECRET_KEY=
+SUPERADMIN_EMAIL=
+SUPERADMIN_PASSWORD=
+Railway:
+- Use Railway PostgreSQL.
+- Set DATABASE_URL from Railway.
+- Run migration during deploy or document manual migration.
+- Set APP_URL=https://lorepedia.net when domain is connected.
+Render:
+- Web service for app.
+- Managed PostgreSQL.
+- Build command: npm install && npx prisma generate && npm run build
+- Start command: npx prisma migrate deploy && npm run start
+VPS:
+- Use Docker Compose.
+- Nginx reverse proxy.
+- SSL via Certbot or Caddy.
+- Persistent volume for uploads if local storage.
+- Backup PostgreSQL regularly.
+Build scripts:
+- npm run dev
+- npm run build
+- npm run start
+- npm run lint
+- npm run test
+- npm run test:e2e
+- npm run db:migrate
+Lorepedia.net Full-Stack Build Prompt
+- npm run db:seed
+- npm run db:studio
+Seed:
+- Create superadmin from environment.
+- Create demo user.
+- Create demo world "Eldoria Archive" with characters, locations, factions, events, map pins, tags, and templates.
+Minimum Viable Product Acceptance Criteria
+The first complete version is accepted only when all of these work:
+Public:
+- Landing page loads and looks polished.
+- Register/login/logout works.
+- Explore page shows public worlds/pages.
+- Public world homepage works.
+- Public page rendering works with markdown, wikilinks, infobox, tags, backlinks.
+- SEO metadata is generated for public content.
+Dashboard:
+- User can create a world.
+- User can create/edit/publish pages.
+- User can use [[wikilinks]].
+- User can see backlinks and broken links.
+- User can create tags/categories/templates.
+- User can upload an image and use it as page/world cover.
+- User can export a world as Markdown/JSON ZIP.
+- User can manage world settings and visibility.
+Admin:
+- Admin dashboard works.
+- Admin can list users/worlds/pages/comments/reports.
+- Admin can suspend users and hide content.
+- Admin settings page works.
+- Audit logs are written.
+Superadmin:
+- Superadmin seed account works.
+- Superadmin can manage admins.
+- Export & Migration page exists.
+- Full platform JSON/ZIP export action exists or is clearly stubbed with safe implementation.
+DevOps:
+- README explains local setup.
+- .env.example is complete.
+Lorepedia.net Full-Stack Build Prompt
+- Docker Compose starts PostgreSQL.
+- Prisma migrations run.
+- App builds without TypeScript errors.
+- Basic tests pass.
+- Deployment docs for Railway, Render, and VPS exist.
+Security:
+- Server-side authorization is implemented.
+- Markdown is sanitized.
+- Upload restrictions exist.
+- Passwords are hashed.
+- Rate limiting architecture exists.
+- Admin actions are audited.
+Phased Build Plan for the Coding AI
+Build in phases. Do not skip earlier phases.
+PHASE 1 - Foundation
+- Initialize Next.js TypeScript project.
+- Install Tailwind, shadcn/ui, Prisma, NextAuth, Zod, React Hook Form, markdown libraries.
+- Create database schema and migrations.
+- Create seed script.
+- Create base layouts, theme variables, UI components.
+PHASE 2 - Auth and Dashboard
+- Register/login/logout.
+- User dashboard.
+- Role helpers and middleware.
+- Account settings.
+PHASE 3 - Worlds and Pages
+- CRUD worlds.
+- CRUD pages.
+- Markdown editor and preview.
+- Publishing and visibility.
+- Public world/page routes.
+PHASE 4 - Wiki Intelligence
+- Wikilink parser.
+- Backlinks.
+- Broken links diagnostics.
+- Tags/categories.
+- Infoboxes.
+- Templates.
+Lorepedia.net Full-Stack Build Prompt
+PHASE 5 - Media, Timeline, Maps
+- Uploads.
+- Media library.
+- Timeline events.
+- Map upload and pins.
+PHASE 6 - Social and Discovery
+- Explore page.
+- Search.
+- Comments.
+- Reactions/bookmarks/follows.
+- Reports.
+PHASE 7 - Admin and Superadmin
+- Admin dashboard.
+- User/content moderation.
+- Settings.
+- Audit logs.
+- Superadmin export/migration.
+PHASE 8 - Import/Export and DevOps
+- Markdown/ZIP import.
+- Markdown/JSON/ZIP export.
+- Docker.
+- Railway/Render/VPS docs.
+- Tests and polish.
+At the end of every phase:
+- Run lint.
+- Run TypeScript build.
+- Run basic tests.
+- Fix errors before moving on.
+Example User Stories
+ As a novelist, I can create a private world bible for my fantasy series so that I can track characters,
+locations, magic systems, and plot events.
+ As a game master, I can create public and private pages so my players see only what they are allowed
+to know.
+ As a creator, I can type [[Kingdom of Arvandor]] and automatically link to that page or create it if it
+does not exist.
+ As a world owner, I can invite an editor to help write lore without giving them admin rights.
+ As a visitor, I can read public wiki pages like a beautiful online encyclopedia.
+ As an admin, I can suspend spam accounts and hide abusive comments.
+ As a superadmin, I can export platform data before migrating from Railway to my VPS.
+ As a writer, I can export my world to Markdown so I never feel locked into the platform.
+Lorepedia.net Full-Stack Build Prompt
+Detailed Feature Checklist for Copilot
+Authentication checklist
+ credentials auth
+ hashed password
+ protected routes
+ role-aware navigation
+ session callback with user role
+ profile page
+ account settings
+World checklist
+ create world modal/page
+ slug validation
+ visibility controls
+ cover/icon upload
+ theme selector
+ member management
+ danger zone
+ public homepage
+Page checklist
+ create/edit/delete/restore
+ autosave
+ publish workflow
+ version history
+ markdown preview
+ infobox
+ tags
+ category
+ parent page
+ search
+ wikilinks
+Admin checklist
+ dashboard metrics
+ user table
+ world table
+ page table
+ comment moderation
+ reports
+ settings
+ announcements
+ audit logs
+Superadmin checklist
+ admin role management
+Lorepedia.net Full-Stack Build Prompt
+ export migration
+ maintenance mode
+ environment diagnostics
+ dangerous action confirmations
+Deployment checklist
+ Dockerfile
+ docker-compose
+ README
+ DEPLOYMENT.md
+ .env.example
+ migration docs
+ seed docs
+Sample .env.example
+# Lorepedia.net environment
+NODE_ENV=development
+APP_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=replace-with-long-random-secret
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/lorepedia
+SUPERADMIN_EMAIL=admin@lorepedia.net
+SUPERADMIN_PASSWORD=ChangeThisImmediately123!
+STORAGE_DRIVER=local
+LOCAL_UPLOAD_DIR=./uploads
+S3_ENDPOINT=
+S3_REGION=auto
+S3_BUCKET=
+S3_ACCESS_KEY_ID=
+S3_SECRET_ACCESS_KEY=
+EMAIL_PROVIDER=none
+RESEND_API_KEY=
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASSWORD=
+CAPTCHA_PROVIDER=none
+CAPTCHA_SITE_KEY=
+CAPTCHA_SECRET_KEY=
+RATE_LIMIT_DRIVER=database
+REDIS_URL=
+Lorepedia.net Full-Stack Build Prompt
+PUBLIC_DEMO_WORLD_ENABLED=true
+MAINTENANCE_MODE=false
+Suggested README Structure
+# Lorepedia
+Your online universe wiki.
+## Features
+- Worlds and public/private wiki pages
+- Markdown editor with live preview
+- Wiki-style internal links
+- Backlinks and diagnostics
+- Infoboxes and templates
+- Tags and categories
+- Timelines and maps
+- Admin and superadmin panels
+- Export and migration tools
+## Local Development
+1. Clone repo
+2. Copy .env.example to .env
+3. Start Postgres
+4. Run Prisma migrations
+5. Seed database
+6. Start dev server
+## Deployment
+- Railway
+- Render
+- VPS Docker Compose
+## Security Notes
+- Change superadmin password
+- Configure NEXTAUTH_SECRET
+- Configure storage
+- Enable HTTPS
+## License
+Add your chosen license.
+Do Not Forget
+Do not create a toy demo only. Build real CRUD, real database models, real auth, real admin roles, real public pages, and
+real deployment files.
+Lorepedia.net Full-Stack Build Prompt
+Do not hardcode the superadmin account inside source code. Use environment variables and a seed script.
+Do not expose private worlds in public routes, search, sitemap, or explore.
+Do not store uploaded files in a way that will be lost on redeploy unless deployment docs clearly warn about persistent
+volumes or S3/R2 storage.
+Do not copy Chronicler assets, code, logo, exact text, or proprietary design. Build Lorepedia as an original online product.
+Prioritize clean, maintainable, production-ready code over flashy but fragile UI.
+APPENDIX A - Suggested Prisma Schema Skeleton
+Use this as guidance. The coding AI should generate the final schema with correct relations, indexes,
+enums, and Auth.js compatibility.
+generator client {
+ provider = "prisma-client-js"
+}
+datasource db {
+ provider = "postgresql"
+ url = env("DATABASE_URL")
+}
+enum UserRole { USER VERIFIED_USER MODERATOR ADMIN SUPERADMIN }
+enum UserStatus { ACTIVE SUSPENDED DELETED }
+enum WorldVisibility { PRIVATE UNLISTED PUBLIC }
+enum WorldStatus { ACTIVE ARCHIVED DELETED }
+enum WorldMemberRole { OWNER CO_OWNER EDITOR WRITER VIEWER COMMENTER }
+enum PageType { ARTICLE CHARACTER LOCATION FACTION ITEM EVENT TIMELINE MAP NOTE BLOG_POST
+TEMPLATE }
+enum PageStatus { DRAFT REVIEW PUBLISHED ARCHIVED DELETED }
+enum PageVisibility { PRIVATE UNLISTED PUBLIC }
+enum CommentStatus { VISIBLE HIDDEN DELETED PENDING_REVIEW }
+enum ReportStatus { OPEN REVIEWING ACTIONED REJECTED }
+enum ReactionType { LIKE HEART BOOKMARK }
+model User {
+ id String @id @default(cuid())
+ email String @unique
+ emailVerified DateTime?
+ username String? @unique
+ name String?
+ image String?
+ bio String?
+Lorepedia.net Full-Stack Build Prompt
+ website String?
+ role UserRole @default(USER)
+ status UserStatus @default(ACTIVE)
+ passwordHash String?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ lastLoginAt DateTime?
+ worlds World[]
+ memberships WorldMember[]
+ pagesCreated Page[] @relation("PageCreatedBy")
+ pagesUpdated Page[] @relation("PageUpdatedBy")
+ comments Comment[]
+ auditLogs AuditLog[]
+}
+model World {
+ id String @id @default(cuid())
+ ownerId String
+ owner User @relation(fields: [ownerId], references: [id])
+ name String
+ slug String @unique
+ description String?
+ visibility WorldVisibility @default(PRIVATE)
+ status WorldStatus @default(ACTIVE)
+ icon String?
+ language String? @default("en")
+ settingsJson Json?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ members WorldMember[]
+ pages Page[]
+ tags Tag[]
+ categories Category[]
+ templates Template[]
+ media MediaAsset[]
+}
+model Page {
+ id String @id @default(cuid())
+ worldId String
+ world World @relation(fields: [worldId], references: [id])
+ parentId String?
+ parent Page? @relation("PageTree", fields: [parentId], references: [id])
+Lorepedia.net Full-Stack Build Prompt
+ children Page[] @relation("PageTree")
+ createdById String
+ createdBy User @relation("PageCreatedBy", fields: [createdById], references: [id])
+ updatedById String?
+ updatedBy User? @relation("PageUpdatedBy", fields: [updatedById], references: [id])
+ title String
+ slug String
+ summary String?
+ type PageType @default(ARTICLE)
+ status PageStatus @default(DRAFT)
+ visibility PageVisibility @default(PRIVATE)
+ contentMarkdown String @default("")
+ contentJson Json?
+ infoboxJson Json?
+ metadataJson Json?
+ publishedAt DateTime?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ deletedAt DateTime?
+ versions PageVersion[]
+ outgoingLinks PageLink[] @relation("OutgoingLinks")
+ incomingLinks PageLink[] @relation("IncomingLinks")
+ comments Comment[]
+ tags PageTag[]
+ @@unique([worldId, slug])
+ @@index([worldId, status, visibility])
+}
+model PageLink {
+ id String @id @default(cuid())
+ worldId String
+ fromPageId String
+ fromPage Page @relation("OutgoingLinks", fields: [fromPageId], references: [id])
+ toPageId String?
+ toPage Page? @relation("IncomingLinks", fields: [toPageId], references: [id])
+ targetTitle String
+ targetSlug String?
+ label String?
+ isResolved Boolean @default(false)
+ createdAt DateTime @default(now())
+ @@index([worldId, fromPageId])
+ @@index([worldId, toPageId])
+Lorepedia.net Full-Stack Build Prompt
+}
+// Continue with WorldMember, PageVersion, Tag, PageTag, Category, Template, MediaAsset,
+// Comment, Reaction, Follow, Bookmark, TimelineEvent, Map, MapPin, Report,
+// Notification, SiteSetting, Theme, AuditLog, Invite, and Auth.js models.
+APPENDIX B - Landing Page Copy Draft
+Hero:
+Build your fictional universe as a living wiki.
+Subheadline:
+Lorepedia gives writers, game masters, and creators a beautiful online workspace for characters, locations, factions,
+timelines, maps, and interconnected lore.
+CTA:
+Start Building Free
+Explore Demo World
+Feature cards:
+- Wiki Links: Connect every person, place, faction, and event with [[wikilinks]].
+- Infoboxes: Turn messy notes into clean encyclopedia-style lore pages.
+- Backlinks: See every page that references the current article.
+- Timelines: Track ancient wars, dynasties, campaigns, and story arcs.
+- Maps: Upload maps and pin locations directly to wiki pages.
+- Templates: Start faster with character, location, item, faction, and event templates.
+- Private or Public: Draft privately, publish when ready, or keep your entire world secret.
+- Export Friendly: Your worlds should never be trapped. Export to Markdown and JSON.
+Section headline:
+A world bible that feels like a real encyclopedia.
+Comparison headline:
+Stop fighting spreadsheets, scattered docs, and generic notes apps.
+Community headline:
+For novelists, GMs, game creators, comic writers, and anyone building a universe.
+APPENDIX C - Page Templates
+Character Template
+ Name
+ Aliases
+ Species/Race
+Lorepedia.net Full-Stack Build Prompt
+ Age
+ Pronouns
+ Occupation
+ Affiliation
+ Status
+ Appearance
+ Personality
+ Backstory
+ Goals
+ Secrets
+ Relationships
+ Timeline
+ Quotes
+ Related Pages
+Location Template
+ Name
+ Type
+ Region
+ Population
+ Ruler/Government
+ Climate
+ Culture
+ History
+ Notable Places
+ Important NPCs
+ Conflicts
+ Related Pages
+Faction Template
+ Name
+ Type
+ Leader
+ Headquarters
+ Ideology
+ Goals
+ Allies
+ Enemies
+ Resources
+ History
+ Ranks
+ Symbols
+ Related Pages
+Item Template
+ Name
+ Type
+Lorepedia.net Full-Stack Build Prompt
+ Owner
+ Origin
+ Appearance
+ Abilities
+ Limitations
+ History
+ Current Location
+ Related Pages
+Event Template
+ Name
+ Date
+ Location
+ Participants
+ Cause
+ Summary
+ Consequences
+ Timeline Impact
+ Related Pages
+APPENDIX D - Admin Settings Inventory
+Key Default Notes
+general.siteName Lorepedia Editable by admin/superadmin
+depending on sensitivity.
+general.tagline Your online universe wiki Editable by admin/superadmin
+depending on sensitivity.
+general.registrationEnabled true Editable by admin/superadmin
+depending on sensitivity.
+general.maintenanceMode false Editable by admin/superadmin
+depending on sensitivity.
+limits.maxWorldsPerUser 10 Editable by admin/superadmin
+depending on sensitivity.
+limits.maxUploadSizeMb 10 Editable by admin/superadmin
+depending on sensitivity.
+limits.storageMbPerUser 500 Editable by admin/superadmin
+depending on sensitivity.
+moderation.commentsEnabled true Editable by admin/superadmin
+depending on sensitivity.
+moderation.requireApprovalForNew
+Users
+false Editable by admin/superadmin
+depending on sensitivity.
+security.captchaProvider none Editable by admin/superadmin
+depending on sensitivity.
+security.rateLimitEnabled true Editable by admin/superadmin
+Lorepedia.net Full-Stack Build Prompt
+depending on sensitivity.
+seo.defaultTitle Lorepedia Editable by admin/superadmin
+depending on sensitivity.
+seo.defaultDescription Create your own online universe
+wiki.
+Editable by admin/superadmin
+depending on sensitivity.
+features.publicExplore true Editable by admin/superadmin
+depending on sensitivity.
+features.aiHelper false Editable by admin/superadmin
+depending on sensitivity.
+features.importMediaWiki false Editable by admin/superadmin
+depending on sensitivity.
+APPENDIX E - Final Command to Give Copilot
+Now generate the Lorepedia.net application exactly as specified. Start by creating the project structure, dependencies,
+Prisma schema, environment example, and base UI. Then continue phase by phase. After each phase, explain what files
+were created, what commands I should run, and what remains. Prioritize working code, safe permissions, clean design,
+and deployability.
+Sources and Inspiration Notes
+This prompt used public descriptions of Chronicler only as high-level product inspiration for a different
+online product. The PDF intentionally instructs the coding AI not to copy proprietary assets, source code,
+exact text, logos, or distinctive UI from Chronicler.
+ Chronicler homepage: https://chronicler.pro/
+ What is Chronicler?: https://chronicler.pro/what-is-chronicler
+ Chronicler GitHub repository: https://github.com/mak-kirkland/chronicler

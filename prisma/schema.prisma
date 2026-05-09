@@ -1,0 +1,539 @@
+// Lorepedia.net Prisma schema
+// Postgres + Auth.js compatible
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------- Enums -----------------------------
+
+enum UserRole {
+  USER
+  VERIFIED_USER
+  MODERATOR
+  ADMIN
+  SUPERADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum WorldVisibility {
+  PRIVATE
+  UNLISTED
+  PUBLIC
+}
+
+enum WorldStatus {
+  ACTIVE
+  ARCHIVED
+  DELETED
+}
+
+enum WorldMemberRole {
+  OWNER
+  CO_OWNER
+  EDITOR
+  WRITER
+  VIEWER
+  COMMENTER
+}
+
+enum PageType {
+  ARTICLE
+  CHARACTER
+  LOCATION
+  FACTION
+  ITEM
+  EVENT
+  TIMELINE
+  MAP
+  NOTE
+  BLOG_POST
+  TEMPLATE
+}
+
+enum PageStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+  DELETED
+}
+
+enum PageVisibility {
+  PRIVATE
+  UNLISTED
+  PUBLIC
+}
+
+enum CommentStatus {
+  VISIBLE
+  HIDDEN
+  DELETED
+  PENDING_REVIEW
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWING
+  ACTIONED
+  REJECTED
+}
+
+enum ReactionType {
+  LIKE
+  HEART
+  BOOKMARK
+}
+
+// ----------------------------- Auth.js compatible models -----------------------------
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ----------------------------- Domain models -----------------------------
+
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  emailVerified DateTime?
+  username      String?    @unique
+  name          String?
+  image         String?
+  bio           String?
+  website       String?
+  role          UserRole   @default(USER)
+  status        UserStatus @default(ACTIVE)
+  passwordHash  String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  lastLoginAt   DateTime?
+
+  accounts      Account[]
+  sessions      Session[]
+
+  worlds        World[]
+  memberships   WorldMember[]
+  pagesCreated  Page[]         @relation("PageCreatedBy")
+  pagesUpdated  Page[]         @relation("PageUpdatedBy")
+  pageVersions  PageVersion[]
+  comments      Comment[]
+  reactions     Reaction[]
+  follows       Follow[]       @relation("FollowFollower")
+  followedBy    Follow[]       @relation("FollowFollowing")
+  bookmarks     Bookmark[]
+  reportsFiled  Report[]       @relation("ReportReporter")
+  reportsAgainst Report[]      @relation("ReportTargetUser")
+  notifications Notification[]
+  invitesSent   Invite[]       @relation("InviteFrom")
+  auditLogs     AuditLog[]
+  mediaUploaded MediaAsset[]   @relation("MediaUploadedBy")
+
+  @@index([role])
+  @@index([status])
+}
+
+model World {
+  id          String          @id @default(cuid())
+  ownerId     String
+  owner       User            @relation(fields: [ownerId], references: [id])
+  name        String
+  slug        String          @unique
+  description String?
+  visibility  WorldVisibility @default(PRIVATE)
+  status      WorldStatus     @default(ACTIVE)
+  icon        String?
+  cover       String?
+  language    String?         @default("en")
+  themeId     String?
+  theme       Theme?          @relation(fields: [themeId], references: [id])
+  settingsJson Json?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+
+  members     WorldMember[]
+  pages       Page[]
+  tags        Tag[]
+  categories  Category[]
+  templates   Template[]
+  media       MediaAsset[]
+  timeline    TimelineEvent[]
+  maps        Map[]
+  invites     Invite[]
+  links       PageLink[]
+
+  @@index([ownerId])
+  @@index([visibility, status])
+}
+
+model WorldMember {
+  id        String          @id @default(cuid())
+  worldId   String
+  world     World           @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      WorldMemberRole @default(VIEWER)
+  createdAt DateTime        @default(now())
+
+  @@unique([worldId, userId])
+  @@index([userId])
+}
+
+model Page {
+  id              String         @id @default(cuid())
+  worldId         String
+  world           World          @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  parentId        String?
+  parent          Page?          @relation("PageTree", fields: [parentId], references: [id])
+  children        Page[]         @relation("PageTree")
+  createdById     String
+  createdBy       User           @relation("PageCreatedBy", fields: [createdById], references: [id])
+  updatedById     String?
+  updatedBy       User?          @relation("PageUpdatedBy", fields: [updatedById], references: [id])
+  title           String
+  slug            String
+  summary         String?
+  type            PageType       @default(ARTICLE)
+  status          PageStatus     @default(DRAFT)
+  visibility      PageVisibility @default(PRIVATE)
+  contentMarkdown String         @default("")
+  contentJson     Json?
+  infoboxJson     Json?
+  metadataJson    Json?
+  coverImage      String?
+  publishedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  deletedAt       DateTime?
+
+  versions      PageVersion[]
+  outgoingLinks PageLink[]    @relation("OutgoingLinks")
+  incomingLinks PageLink[]    @relation("IncomingLinks")
+  comments      Comment[]
+  tags          PageTag[]
+  reactions     Reaction[]
+  bookmarks     Bookmark[]
+  categoryId    String?
+  category      Category?     @relation(fields: [categoryId], references: [id])
+
+  @@unique([worldId, slug])
+  @@index([worldId, status, visibility])
+  @@index([worldId, type])
+}
+
+model PageVersion {
+  id              String   @id @default(cuid())
+  pageId          String
+  page            Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  version         Int
+  title           String
+  contentMarkdown String
+  infoboxJson     Json?
+  authorId        String?
+  author          User?    @relation(fields: [authorId], references: [id])
+  createdAt       DateTime @default(now())
+
+  @@unique([pageId, version])
+  @@index([pageId])
+}
+
+model PageLink {
+  id          String   @id @default(cuid())
+  worldId     String
+  world       World    @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  fromPageId  String
+  fromPage    Page     @relation("OutgoingLinks", fields: [fromPageId], references: [id], onDelete: Cascade)
+  toPageId    String?
+  toPage      Page?    @relation("IncomingLinks", fields: [toPageId], references: [id])
+  targetTitle String
+  targetSlug  String?
+  label       String?
+  isResolved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([worldId, fromPageId])
+  @@index([worldId, toPageId])
+  @@index([worldId, isResolved])
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  worldId   String
+  world     World     @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  name      String
+  slug      String
+  color     String?
+  pages     PageTag[]
+  createdAt DateTime  @default(now())
+
+  @@unique([worldId, slug])
+}
+
+model PageTag {
+  pageId String
+  page   Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  tagId  String
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([pageId, tagId])
+}
+
+model Category {
+  id        String  @id @default(cuid())
+  worldId   String
+  world     World   @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  name      String
+  slug      String
+  parentId  String?
+  parent    Category? @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
+  pages     Page[]
+  createdAt DateTime @default(now())
+
+  @@unique([worldId, slug])
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  worldId     String
+  world       World    @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  type        PageType @default(ARTICLE)
+  schemaJson  Json
+  bodyMarkdown String  @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MediaAsset {
+  id          String   @id @default(cuid())
+  worldId     String?
+  world       World?   @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  uploadedById String
+  uploadedBy  User     @relation("MediaUploadedBy", fields: [uploadedById], references: [id])
+  filename    String
+  storageKey  String   @unique
+  mimeType    String
+  sizeBytes   Int
+  width       Int?
+  height      Int?
+  alt         String?
+  createdAt   DateTime @default(now())
+
+  @@index([worldId])
+}
+
+model Comment {
+  id        String        @id @default(cuid())
+  pageId    String
+  page      Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User          @relation(fields: [authorId], references: [id])
+  parentId  String?
+  parent    Comment?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[]     @relation("CommentReplies")
+  body      String
+  status    CommentStatus @default(VISIBLE)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([pageId])
+  @@index([status])
+}
+
+model Reaction {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pageId    String
+  page      Page         @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      ReactionType
+  createdAt DateTime     @default(now())
+
+  @@unique([userId, pageId, type])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, pageId])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("FollowFollower", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User     @relation("FollowFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
+
+model TimelineEvent {
+  id          String   @id @default(cuid())
+  worldId     String
+  world       World    @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  date        String
+  sortKey     Int      @default(0)
+  pageId      String?
+  createdAt   DateTime @default(now())
+
+  @@index([worldId, sortKey])
+}
+
+model Map {
+  id        String   @id @default(cuid())
+  worldId   String
+  world     World    @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  name      String
+  imageKey  String
+  width     Int
+  height    Int
+  pins      MapPin[]
+  createdAt DateTime @default(now())
+}
+
+model MapPin {
+  id          String  @id @default(cuid())
+  mapId       String
+  map         Map     @relation(fields: [mapId], references: [id], onDelete: Cascade)
+  x           Float
+  y           Float
+  label       String
+  pageId      String?
+  description String?
+}
+
+model Report {
+  id            String       @id @default(cuid())
+  reporterId    String
+  reporter      User         @relation("ReportReporter", fields: [reporterId], references: [id])
+  targetType    String
+  targetId      String
+  targetUserId  String?
+  targetUser    User?        @relation("ReportTargetUser", fields: [targetUserId], references: [id])
+  reason        String
+  status        ReportStatus @default(OPEN)
+  createdAt     DateTime     @default(now())
+  resolvedAt    DateTime?
+
+  @@index([status])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  payload   Json
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Theme {
+  id        String  @id @default(cuid())
+  name      String  @unique
+  variables Json
+  worlds    World[]
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String
+  target    String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model Invite {
+  id        String   @id @default(cuid())
+  worldId   String
+  world     World    @relation(fields: [worldId], references: [id], onDelete: Cascade)
+  fromId    String
+  from      User     @relation("InviteFrom", fields: [fromId], references: [id])
+  email     String
+  token     String   @unique
+  role      WorldMemberRole @default(VIEWER)
+  expiresAt DateTime
+  acceptedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([worldId])
+  @@index([email])
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  key       String
+  count     Int      @default(1)
+  windowEnd DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([key, windowEnd])
+  @@index([windowEnd])
+}

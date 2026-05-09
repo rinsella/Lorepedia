@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 33% 97%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --primary: 250 65% 45%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 250 65% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 250 65% 45%;
+    --radius: 0.6rem;
+  }
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 12%;
+    --card-foreground: 210 40% 96%;
+    --primary: 250 80% 70%;
+    --primary-foreground: 222 47% 8%;
+    --secondary: 217 33% 18%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 18%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 96%;
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 250 80% 70%;
+  }
+  * {
+    border-color: hsl(var(--border));
+  }
+  html, body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Wiki / article styling */
+.prose-wiki {
+  @apply max-w-none leading-7;
+}
+.prose-wiki h1 { @apply text-3xl font-serif font-semibold border-b pb-2 mt-2 mb-4; }
+.prose-wiki h2 { @apply text-2xl font-serif font-semibold border-b pb-1 mt-8 mb-3; }
+.prose-wiki h3 { @apply text-xl font-serif font-semibold mt-6 mb-2; }
+.prose-wiki p  { @apply my-3; }
+.prose-wiki ul { @apply list-disc pl-6 my-3; }
+.prose-wiki ol { @apply list-decimal pl-6 my-3; }
+.prose-wiki blockquote { @apply border-l-4 pl-4 italic text-muted-foreground my-4; }
+.prose-wiki code { @apply rounded bg-muted px-1.5 py-0.5 text-sm; }
+.prose-wiki pre  { @apply rounded-lg bg-muted p-4 my-4 overflow-x-auto; }
+.prose-wiki a { @apply text-primary underline-offset-4 hover:underline; }
+
+.wikilink { @apply text-primary; }
+.wikilink-broken { @apply text-destructive italic; }
